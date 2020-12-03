@@ -14,18 +14,6 @@ const input = `
 2-9 c: ccccccccc
 `
 
-func part1(entries []*Entry) int {
-	valid := 0
-
-	for _, entry := range entries {
-		if n := strings.Count(entry.word, string(entry.letter)); entry.lo <= n && n <= entry.hi {
-			println(entry)
-			valid += 1
-		}
-	}
-	return valid
-}
-
 type Entry struct {
 	lo     int
 	hi     int
@@ -40,6 +28,42 @@ func parse(line string) *Entry {
 	return &entry
 }
 
+func part1(entries []*Entry) int {
+	valid := 0
+
+	for _, entry := range entries {
+		if n := strings.Count(entry.word, string(entry.letter)); entry.lo <= n && n <= entry.hi {
+			valid += 1
+		}
+	}
+	return valid
+}
+
+func xor(a, b bool) bool {
+	return a != b
+}
+
+func part2(entries []*Entry) int {
+	valid := 0
+
+	for _, entry := range entries {
+		var hasLo, hasHi bool
+		for i, c := range " " + entry.word {
+			if i == entry.lo && c == entry.letter {
+				hasLo = true
+			}
+			if i == entry.hi && c == entry.letter {
+				hasHi = true
+				break
+			}
+		}
+		if xor(hasLo, hasHi) {
+			valid += 1
+		}
+	}
+	return valid
+}
+
 func main() {
 	fp, err := os.Open("data/d02.txt")
 	check(err)
@@ -51,6 +75,7 @@ func main() {
 	}
 
 	println(part1(entries))
+	println(part2(entries))
 }
 
 func check(err error) {
