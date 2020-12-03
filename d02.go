@@ -14,23 +14,30 @@ const input = `
 2-9 c: ccccccccc
 `
 
-func part1(lines []string) int {
+func part1(entries []*Entry) int {
 	valid := 0
 
-	for _, line := range lines {
-		var lo, hi int
-		var letter rune
-		var password string
-		_, err := fmt.Sscanf(line, "%d-%d %c: %s", &lo, &hi, &letter, &password)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if n := strings.Count(password, string(letter)); lo <= n && n <= hi {
-			println(line)
+	for _, entry := range entries {
+		if n := strings.Count(entry.word, string(entry.letter)); entry.lo <= n && n <= entry.hi {
+			println(entry)
 			valid += 1
 		}
 	}
 	return valid
+}
+
+type Entry struct {
+	lo     int
+	hi     int
+	letter rune
+	word   string
+}
+
+func parse(line string) *Entry {
+	entry := Entry{}
+	_, err := fmt.Sscanf(line, "%d-%d %c: %s", &entry.lo, &entry.hi, &entry.letter, &entry.word)
+	check(err)
+	return &entry
 }
 
 func main() {
@@ -38,12 +45,12 @@ func main() {
 	check(err)
 
 	scanner := bufio.NewScanner(fp)
-	lines := []string{}
+	entries := []*Entry{}
 	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
+		entries = append(entries, parse(scanner.Text()))
 	}
 
-	println(part1(lines))
+	println(part1(entries))
 }
 
 func check(err error) {
