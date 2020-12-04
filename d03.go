@@ -30,10 +30,13 @@ func parsed03() []string {
 	return lines
 }
 
-func main() {
-	//grid := strings.Split(strings.TrimSpace(s), "\n")
-	grid := parsed03()
-	dRow, dCol := 1, 3
+type Vector struct {
+	dRow int
+	dCol int
+}
+
+func countTrees(grid []string, v Vector) int {
+	dRow, dCol := v.dRow, v.dCol
 	row := 0
 	col := 0
 	n := 0
@@ -51,5 +54,36 @@ func main() {
 			break
 		}
 	}
-	println("done!", n)
+	return n
+}
+
+func part1(grid []string) int {
+	return countTrees(grid, Vector{dRow: 1, dCol: 3})
+}
+
+func part2(grid []string) int {
+	nTrees := []int{}
+	vectors := []Vector{
+		{ dRow: 1, dCol: 1, },
+		{ dRow: 1, dCol: 3, },
+		{ dRow: 1, dCol: 5, },
+		{ dRow: 1, dCol: 7, },
+		{ dRow: 2, dCol: 1, },
+	}
+	for _, v := range vectors {
+		nTrees = append(nTrees, countTrees(grid, v))
+	}
+
+	// u_u
+	acc := 1
+	for _, x := range nTrees{
+		acc *= x
+	}
+	return acc
+}
+
+func main() {
+	grid := parsed03()
+	println(part1(grid))
+	println(part2(grid))
 }
