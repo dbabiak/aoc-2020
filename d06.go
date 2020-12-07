@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/dbabiak/aoc-2020/utils"
+	"github.com/dbabiak/dbgo"
 	"strings"
 )
 
@@ -68,7 +68,7 @@ func d6p2(groups [][]string) int {
 }
 
 func main() {
-	lines := utils.PathToLines("data/d06.txt")
+	lines := dbgo.PathToLines("data/d06.txt")
 	groups := d6parse(lines)
 	fmt.Printf("%v\n", d6p1(groups))
 	fmt.Printf("%v\n", d6p2(groups))
